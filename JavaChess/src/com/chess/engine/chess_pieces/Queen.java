@@ -11,10 +11,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class Rook extends Piece {
-    private final static int[] CANDIDATE_VECTOR_OFFSETS = {-8, -1, 1, 8};
+public class Queen extends Piece {
 
-    public Rook(final int piecePosition, final Alliance pieceAlliance) {
+    private final static int[] CANDIDATE_VECTOR_OFFSETS = {-9, -8, -7, -1, 1, 7, 8, 9};
+
+    public Queen(final int piecePosition, final Alliance pieceAlliance) {
         super(piecePosition, pieceAlliance);
     }
 
@@ -22,7 +23,7 @@ public class Rook extends Piece {
     public Collection<Move> calculateLegalMoves(final ChessBoard chessBoard) {
         final List<Move> legalMoves = new ArrayList<>();
 
-        for (final int candidateCoordinateOffset: CANDIDATE_VECTOR_OFFSETS) {
+        for (final int candidateCoordinateOffset : CANDIDATE_VECTOR_OFFSETS) {
             int candidateDestinationCoordinate = this.piecePosition;
 
             while (BoardUtils.isValidTileCoordinate(candidateDestinationCoordinate)) {
@@ -55,9 +56,12 @@ public class Rook extends Piece {
     }
 
     private static boolean isFirstColumnExclusion(final int currentPosition, final int candidateOffset) {
-        return BoardUtils.FIRST_COLUMN[currentPosition] && (candidateOffset == -1);
+        return BoardUtils.FIRST_COLUMN[currentPosition] && (candidateOffset == -1 ||
+                candidateOffset == -9 || candidateOffset == 7);
     }
+
     private static boolean isEighthColumnExclusion(final int currentPosition, final int candidateOffset) {
-        return BoardUtils.EIGHTH_COLUMN[currentPosition] && (candidateOffset == 1);
+        return BoardUtils.EIGHTH_COLUMN[currentPosition] && (candidateOffset == -7 ||
+                candidateOffset == 1 || candidateOffset == 9);
     }
 }

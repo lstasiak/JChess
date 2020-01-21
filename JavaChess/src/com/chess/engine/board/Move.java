@@ -3,7 +3,6 @@ package com.chess.engine.board;
 import com.chess.engine.chess_pieces.Piece;
 
 public abstract class Move {
-
     final ChessBoard board;
     final Piece movedPiece;
     final int destinationCoordinate;
@@ -24,7 +23,6 @@ public abstract class Move {
         }
     }
     public static final class AttackMove extends Move {
-
         final Piece attackedPiece;
 
         public AttackMove(final ChessBoard board,

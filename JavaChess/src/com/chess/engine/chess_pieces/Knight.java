@@ -16,7 +16,7 @@ import java.util.List;
 public class Knight extends Piece{
     private static final int[] CANDIDATE_OFFSETS = {-17, -15, -10, -6, 6, 10, 15, 17};
 
-    Knight(final int piecePosition, final Alliance pieceAlliance) {
+    public Knight(final int piecePosition, final Alliance pieceAlliance) {
         super(piecePosition, pieceAlliance);
     }
 
@@ -57,9 +57,7 @@ public class Knight extends Piece{
 
     private static boolean isFirstColumnExclusion(final int currentPosiotion, final int candidateOffset) {
         return BoardUtils.FIRST_COLUMN[currentPosiotion] && ((candidateOffset == -17) ||
-                (candidateOffset == -10) ||
-                (candidateOffset == 6) ||
-                (candidateOffset == 15));
+                (candidateOffset == -10) || (candidateOffset == 6) || (candidateOffset == 15));
     }
     private static boolean isSecondColumnExclusion(final int currentPosition, final int candidateOffset){
         return BoardUtils.SECOND_COLUMN[currentPosition] && ((candidateOffset == -10) ||
@@ -72,8 +70,6 @@ public class Knight extends Piece{
     }
     private static boolean isEighthColumnExclusion(final int currentPosition, final int candidateOffset) {
         return BoardUtils.EIGHTH_COLUMN[currentPosition] && ((candidateOffset == -15) ||
-                (candidateOffset == -6) ||
-                (candidateOffset == 10) ||
-                (candidateOffset == 17));
+                (candidateOffset == -6) || (candidateOffset == 10) || (candidateOffset == 17));
     }
 }
