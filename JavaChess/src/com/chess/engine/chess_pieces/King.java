@@ -12,7 +12,6 @@ import java.util.Collection;
 import java.util.List;
 
 public class King extends Piece {
-
     private final static int[] CANDIDATE_OFFSETS = {-9, -8, -7, -1, 1, 7, 8, 9};
 
     public King(final int piecePosition, final Alliance pieceAlliance) {
@@ -23,7 +22,6 @@ public class King extends Piece {
     public Collection<Move> calculateLegalMoves(ChessBoard chessBoard) {
 
         final List<Move> legalMoves = new ArrayList<>();
-
 
         for (final int currentCandidateOffset: CANDIDATE_OFFSETS) {
            final int candidateDestinationCoordinate = this.piecePosition + currentCandidateOffset;
@@ -49,6 +47,11 @@ public class King extends Piece {
            }
         }
         return ImmutableList.copyOf(legalMoves);
+    }
+
+    @Override
+    public String toString() {
+        return PieceType.KING.toString(); // to test the app
     }
 
     private static boolean isFirstColumnExclusion(final int currentPosiotion, final int candidateOffset) {
