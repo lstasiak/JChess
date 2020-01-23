@@ -21,7 +21,7 @@ public class ChessBoard {
     private final BlackPlayer blackPlayer;
     private final Player currentPlayer;
 
-    public ChessBoard(Builder builder) {
+    public ChessBoard(final Builder builder) {
         this.gameBoard = createGameBoard(builder);
         this.whitePieces = calculateActivePieces(this.gameBoard, Alliance.WHITE);
         this.blackPieces = calculateActivePieces(this.gameBoard, Alliance.BLACK);
@@ -31,7 +31,7 @@ public class ChessBoard {
 
         this.whitePlayer = new WhitePlayer(this, whiteStandardLegalMoves, blackStandardLegalMoves);
         this.blackPlayer = new BlackPlayer(this, whiteStandardLegalMoves, blackStandardLegalMoves);
-        this.currentPlayer = null;
+        this.currentPlayer = builder.nextMoveMaker.choosePlayer(this.blackPlayer, this.whitePlayer);
     }
 
     @Override
@@ -104,7 +104,6 @@ public class ChessBoard {
         return builder.build();
     }
 
-    // TODO: check out this method
     private static void generatePawns(final Builder builder, final Alliance alliance, int firstPosition, int lastPosition) {
 
         IntStream.rangeClosed(firstPosition, lastPosition)

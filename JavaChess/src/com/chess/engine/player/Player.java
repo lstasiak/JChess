@@ -33,7 +33,7 @@ public abstract class Player {
     public Collection<Move> getLegalMoves(){
         return this.legalMoves;
     }
-    protected abstract Collection<Piece> getActivePieces();
+    public abstract Collection<Piece> getActivePieces();
     public abstract Alliance getAlliance();
     public abstract Player getOpponent();
 

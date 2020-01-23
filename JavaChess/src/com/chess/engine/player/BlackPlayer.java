@@ -9,15 +9,15 @@ import java.util.Collection;
 
 public class BlackPlayer extends Player {
 
-    public BlackPlayer(ChessBoard chessBoard,
-                       Collection<Move> whiteStandardLegalMoves,
-                       Collection<Move> blackStandardLegalMoves) {
+    public BlackPlayer(final ChessBoard chessBoard,
+                       final Collection<Move> whiteStandardLegalMoves,
+                       final Collection<Move> blackStandardLegalMoves) {
 
         super(chessBoard, blackStandardLegalMoves, whiteStandardLegalMoves);
     }
 
     @Override
-    protected Collection<Piece> getActivePieces() {
+    public Collection<Piece> getActivePieces() {
         return this.chessBoard.getBlackPieces();
     }
 

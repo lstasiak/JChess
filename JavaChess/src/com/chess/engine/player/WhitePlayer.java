@@ -10,15 +10,15 @@ import java.util.Collection;
 
 public class WhitePlayer extends Player {
 
-    public WhitePlayer(ChessBoard chessBoard,
-                       Collection<Move> whiteStandardLegalMoves,
-                       Collection<Move> blackStandardLegalMoves) {
+    public WhitePlayer(final ChessBoard chessBoard,
+                       final Collection<Move> whiteStandardLegalMoves,
+                       final Collection<Move> blackStandardLegalMoves) {
 
         super(chessBoard, whiteStandardLegalMoves, blackStandardLegalMoves);
     }
 
     @Override
-    protected Collection<Piece> getActivePieces() {
+    public Collection<Piece> getActivePieces() {
         return this.chessBoard.getWhitePieces();
     }
 
