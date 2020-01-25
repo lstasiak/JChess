@@ -6,10 +6,12 @@ import com.chess.engine.player.BlackPlayer;
 import com.chess.engine.player.Player;
 import com.chess.engine.player.WhitePlayer;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterables;
 
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 public class ChessBoard {
 
@@ -134,10 +136,18 @@ public class ChessBoard {
         return this.currentPlayer;
     }
 
+    public Collection<Move> getAllLegalMoves() {
+        Iterable<Move> allMoves = Iterables.unmodifiableIterable(Iterables.concat(this.whitePlayer.getLegalMoves(),
+                this.blackPlayer.getLegalMoves()));
+
+        return ImmutableList.copyOf(allMoves);
+    }
+
     public static class Builder {
 
         Map<Integer, Piece> boardConfig;
         Alliance nextMoveMaker;
+        Pawn enPassantPawn;
 
         public Builder() {
             this.boardConfig = new HashMap<>();
@@ -156,6 +166,9 @@ public class ChessBoard {
             return new ChessBoard(this);
         }
 
+        public void setEnPassantPawn(Pawn movedPawn) {
+            this.enPassantPawn = movedPawn;
+        }
     }
 
 }

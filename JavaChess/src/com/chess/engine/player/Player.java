@@ -30,6 +30,7 @@ public abstract class Player {
     public King getPlayerKing(){
         return this.playerKing;
     }
+
     public Collection<Move> getLegalMoves(){
         return this.legalMoves;
     }
@@ -61,13 +62,16 @@ public abstract class Player {
     public boolean isInCheck() {
         return this.isInCheck;
     }
+
     public boolean isInCheckMate() {
         return this.isInCheck && !hasEscapeMoves();
     }
+
     // NOT CHECK BUT NO MOVE POSSIBILITY
     public boolean isInStaleMate() {
         return !this.isInCheck && !hasEscapeMoves();
     }
+
     protected boolean hasEscapeMoves() {
         return this.legalMoves.stream()
                 .map(this::makeMove)

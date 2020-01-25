@@ -5,6 +5,7 @@ import com.chess.engine.board.ChessBoard;
 import com.chess.engine.board.Move;
 
 import java.util.Collection;
+import java.util.Objects;
 
 public abstract class Piece {
 
@@ -34,6 +35,22 @@ public abstract class Piece {
     }
     public Alliance getPieceAlliance() {
         return this.pieceAlliance;
+    }
+
+    @Override
+    public boolean equals(final Object other) {
+        if (this == other) return true;
+        if (other == null || getClass() != other.getClass()) return false;
+        Piece piece = (Piece) other;
+        return piecePosition == piece.piecePosition &&
+                isFirstMove == piece.isFirstMove &&
+                pieceAlliance == piece.pieceAlliance &&
+                pieceType == piece.pieceType;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(piecePosition, pieceAlliance, isFirstMove, pieceType);
     }
 
     public abstract Collection<Move> calculateLegalMoves(final ChessBoard chessBoard);
