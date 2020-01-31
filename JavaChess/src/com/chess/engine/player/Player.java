@@ -2,13 +2,17 @@ package com.chess.engine.player;
 import com.chess.engine.Alliance;
 import com.chess.engine.board.ChessBoard;
 import com.chess.engine.board.Move;
+import com.chess.engine.board.MoveTransition;
 import com.chess.engine.chess_pieces.King;
 import com.chess.engine.chess_pieces.Piece;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterables;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.chess.engine.board.Move.*;
 
 public abstract class Player {
 
@@ -23,7 +27,7 @@ public abstract class Player {
 
         this.chessBoard = chessBoard;
         this.playerKing = establishKing();
-        this.legalMoves = legalMoves;
+        this.legalMoves = ImmutableList.copyOf(Iterables.concat(legalMoves, calculateKingCastles(legalMoves, opponentMoves)));
         this.isInCheck = !Player.calculateAttacksOnTile(this.playerKing.getPiecePosition(), opponentMoves).isEmpty();
     }
 
@@ -34,11 +38,8 @@ public abstract class Player {
     public Collection<Move> getLegalMoves(){
         return this.legalMoves;
     }
-    public abstract Collection<Piece> getActivePieces();
-    public abstract Alliance getAlliance();
-    public abstract Player getOpponent();
 
-    private static Collection<Move> calculateAttacksOnTile(int piecePosition, Collection<Move> moves) {
+    protected static Collection<Move> calculateAttacksOnTile(int piecePosition, Collection<Move> moves) {
         final List<Move> attackMoves = moves.stream()
                 .filter(move -> piecePosition == move.getDestinationCoordinate())
                 .collect(Collectors.toList());
@@ -96,4 +97,10 @@ public abstract class Player {
         // return new transition board wrapped in a new move transition
         return new MoveTransition(transitionBoard, move, MoveStatus.DONE);
     }
+
+    public abstract Collection<Piece> getActivePieces();
+    public abstract Alliance getAlliance();
+    public abstract Player getOpponent();
+    protected abstract Collection<Move> calculateKingCastles(Collection<Move> playerLegals, Collection<Move> opponentLegals);
+
 }

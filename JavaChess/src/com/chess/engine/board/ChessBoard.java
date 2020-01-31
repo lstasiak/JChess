@@ -13,6 +13,8 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
+import static com.chess.engine.board.Move.*;
+
 public class ChessBoard {
 
     private final List<Tile> gameBoard;
@@ -22,18 +24,21 @@ public class ChessBoard {
     private final WhitePlayer whitePlayer;
     private final BlackPlayer blackPlayer;
     private final Player currentPlayer;
+    private final Pawn enPassantPawn;
+    private final Move transitionMove;
 
     public ChessBoard(final Builder builder) {
         this.gameBoard = createGameBoard(builder);
         this.whitePieces = calculateActivePieces(this.gameBoard, Alliance.WHITE);
         this.blackPieces = calculateActivePieces(this.gameBoard, Alliance.BLACK);
-
+        this.enPassantPawn = builder.enPassantPawn;
         final Collection<Move> whiteStandardLegalMoves = calculateLegalMoves(this.whitePieces);
         final Collection<Move> blackStandardLegalMoves = calculateLegalMoves(this.blackPieces);
 
         this.whitePlayer = new WhitePlayer(this, whiteStandardLegalMoves, blackStandardLegalMoves);
         this.blackPlayer = new BlackPlayer(this, whiteStandardLegalMoves, blackStandardLegalMoves);
-        this.currentPlayer = builder.nextMoveMaker.choosePlayer(this.blackPlayer, this.whitePlayer);
+        this.currentPlayer = builder.nextMoveMaker.choosePlayer(this.whitePlayer, this.blackPlayer);
+        this.transitionMove = builder.transitionMove != null ? builder.transitionMove : FactoryMove.getNullMove();
     }
 
     @Override
@@ -116,6 +121,12 @@ public class ChessBoard {
     public Tile getTile(final int tileCoordinate) {
         return gameBoard.get(tileCoordinate);
     }
+    public Pawn getEnPassantPawn() {
+        return this.enPassantPawn;
+    }
+    public Move getTransitionMove() {
+        return this.transitionMove;
+    }
 
     public Collection<Piece> getBlackPieces() {
         return this.blackPieces;
@@ -123,15 +134,16 @@ public class ChessBoard {
     public Collection<Piece> getWhitePieces() {
         return this.whitePieces;
     }
-
+    public Collection<Piece> getAllPieces() {
+        return Stream.concat(this.whitePieces.stream(),
+                this.blackPieces.stream()).collect(Collectors.toList());
+    }
     public Player blackPlayer() {
         return this.blackPlayer;
     }
-
     public Player whitePlayer() {
         return this.whitePlayer;
     }
-
     public Player currentPlayer(){
         return this.currentPlayer;
     }
@@ -148,6 +160,7 @@ public class ChessBoard {
         Map<Integer, Piece> boardConfig;
         Alliance nextMoveMaker;
         Pawn enPassantPawn;
+        Move transitionMove;
 
         public Builder() {
             this.boardConfig = new HashMap<>();
@@ -157,8 +170,17 @@ public class ChessBoard {
             this.boardConfig.put(piece.getPiecePosition(), piece);
             return this;
         }
-        public Builder setMoveMaker(final Alliance alliance) {
+        public Builder setMoveMaker(final Alliance nextMoveMaker) {
             this.nextMoveMaker = nextMoveMaker;
+            return this;
+        }
+        public Builder setEnPassantPawn(final Pawn enPassantPawn) {
+            this.enPassantPawn = enPassantPawn;
+            return this;
+        }
+
+        public Builder setMoveTransition(final Move transitionMove) {
+            this.transitionMove = transitionMove;
             return this;
         }
 
@@ -166,9 +188,6 @@ public class ChessBoard {
             return new ChessBoard(this);
         }
 
-        public void setEnPassantPawn(Pawn movedPawn) {
-            this.enPassantPawn = movedPawn;
-        }
     }
 
 }

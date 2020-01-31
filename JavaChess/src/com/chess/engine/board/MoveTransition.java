@@ -1,12 +1,8 @@
-package com.chess.engine.player;
+package com.chess.engine.board;
 
-import com.chess.engine.board.ChessBoard;
-import com.chess.engine.board.Move;
-
-import java.util.concurrent.Future;
+import static com.chess.engine.board.Move.*;
 
 // to wrap the board when the move is done
-
 public class MoveTransition {
     private final ChessBoard transitionBoard;
     private final Move move;

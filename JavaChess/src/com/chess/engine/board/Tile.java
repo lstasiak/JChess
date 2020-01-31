@@ -12,6 +12,10 @@ public abstract class Tile {
     protected final int tileCoordinate; // immutable field
     private static final Map<Integer, EmptyTile> EMPTY_TILES_CACHE = createAllPossibleEmptyTiles();
 
+    private Tile(final int tileCoordinate) {
+        this.tileCoordinate = tileCoordinate;
+    }
+
     private static Map<Integer,EmptyTile> createAllPossibleEmptyTiles() {
         final Map<Integer, EmptyTile> emptyTileMap = IntStream.range(0, BoardUtils.NUM_TILES)
                 .boxed()
@@ -20,18 +24,17 @@ public abstract class Tile {
         return ImmutableMap.copyOf(emptyTileMap); // from guava library --> more effective than Collections.unmodifiableMap()
     }
 
-    private Tile(final int tileCoordinate) {
-        this.tileCoordinate = tileCoordinate;
-    }
-
     public static Tile createTile(final int tileCoordinate, final Piece piece) {
         return piece != null ? new OccupiedTile(tileCoordinate, piece): EMPTY_TILES_CACHE.get(tileCoordinate);
     }
 
     public abstract boolean isTileOccupied();
     public abstract Piece getPiece();
+    public int getTileCoordinate() {
+        return this.tileCoordinate;
+    }
 
-    public static final class EmptyTile extends Tile{
+    public static final class EmptyTile extends Tile {
 
         EmptyTile(final int coordinate) {
             super(coordinate);
@@ -51,6 +54,7 @@ public abstract class Tile {
         public Piece getPiece() {
             return null;
         }
+
     }
     public static final class OccupiedTile extends Tile {
         private final Piece pieceOnTile;
@@ -59,13 +63,11 @@ public abstract class Tile {
             super(tileCoordinate);
             this.pieceOnTile = pieceOnTile;
         }
-
         @Override
         public String toString() {
             return getPiece().getPieceAlliance()
                     .isBlack() ? getPiece().toString().toLowerCase() : getPiece().toString();
         }
-
         @Override
         public boolean isTileOccupied() {
             return true;
